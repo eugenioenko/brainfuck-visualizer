@@ -1,22 +1,33 @@
 function Brainfuck(maxIns){
 	this.maxIns = typeof maxIns === "undefined" ? 5000 : maxIns;
+	this.memSize = 108;
 	this.output = [];
 	this.input = [];
-	this.mem =  new Array(100).fill(0);
+	this.mem =  new Array(this.memSize).fill(0);
 	this.ip = 0;
 	this.ptr = 0;
 	this.ins = '';
 	this.counter = 0;
 	this.active  = false;
 }
-Brainfuck.prototype['>'] = function(){ ++this.ptr };
-Brainfuck.prototype['<'] = function(){ --this.ptr };
-Brainfuck.prototype['+'] = function(){ this.mem[this.ptr] = ++this.mem[this.ptr] > 255 ? 0 : this.mem[this.ptr] };
-Brainfuck.prototype['-'] = function(){ this.mem[this.ptr] = --this.mem[this.ptr] < 0 ? 255 : this.mem[this.ptr] };
+Brainfuck.prototype['>'] = function(){
+	this.ptr = ++this.ptr > this.memSize-1 ? 0 : this.ptr;
+};
+Brainfuck.prototype['<'] = function(){
+	this.ptr = --this.ptr < 0 ? this.memSize-1 : this.ptr;
+};
+Brainfuck.prototype['+'] = function(){
+	this.mem[this.ptr] = ++this.mem[this.ptr] > 255 ? 0 : this.mem[this.ptr]
+};
+Brainfuck.prototype['-'] = function(){
+	this.mem[this.ptr] = --this.mem[this.ptr] < 0 ? 255 : this.mem[this.ptr]
+};
 Brainfuck.prototype['.'] = function(){
 	this.output.push(String.fromCharCode(this.mem[this.ptr]));
 };
-Brainfuck.prototype[','] = function(){ this.mem[this.ptr] = ''}
+Brainfuck.prototype[','] = function(){
+	this.mem[this.ptr] = '';
+};
 Brainfuck.prototype['['] = function(){
 	if(this.mem[this.ptr] == 0){
 		var brackets = 1;
@@ -60,7 +71,7 @@ Brainfuck.prototype.tick = function(){
 Brainfuck.prototype.reset = function(){
 	this.output = [];
 	this.input = [];
-	this.mem =  new Array(100).fill(0);
+	this.mem =  new Array(this.memSize).fill(0);
 	this.ip = 0;
 	this.ptr = 0;
 	this.ins = '';
