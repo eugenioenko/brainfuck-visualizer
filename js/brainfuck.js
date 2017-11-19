@@ -1,5 +1,5 @@
 function Brainfuck(maxIns){
-	this.maxIns = typeof maxIns === "undefined" ? 1000 : maxIns;
+	this.maxIns = typeof maxIns === "undefined" ? 5000 : maxIns;
 	this.output = [];
 	this.input = [];
 	this.mem =  new Array(100).fill(0);
@@ -11,8 +11,8 @@ function Brainfuck(maxIns){
 }
 Brainfuck.prototype['>'] = function(){ ++this.ptr };
 Brainfuck.prototype['<'] = function(){ --this.ptr };
-Brainfuck.prototype['+'] = function(){ ++this.mem[this.ptr] };
-Brainfuck.prototype['-'] = function(){ --this.mem[this.ptr] };
+Brainfuck.prototype['+'] = function(){ this.mem[this.ptr] = ++this.mem[this.ptr] > 255 ? 0 : this.mem[this.ptr] };
+Brainfuck.prototype['-'] = function(){ this.mem[this.ptr] = --this.mem[this.ptr] < 0 ? 255 : this.mem[this.ptr] };
 Brainfuck.prototype['.'] = function(){
 	this.output.push(String.fromCharCode(this.mem[this.ptr]));
 };
