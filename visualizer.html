@@ -1,0 +1,108 @@
+<html lang="en" ng-app="bfApp">
+<head>
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<link rel="stylesheet" href="css/sdf.css">
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.5/angular.min.js"></script>
+	<script src="js/brainfuck.js"></script>
+	<title>Brainfuck</title>
+	<style>
+		*{
+			box-sizing: border-box;
+		}
+		#container{
+			max-width: 940px;
+			margin-left: auto;
+			margin-right: auto;
+		}
+		.sdf-1.cur{
+			background-color: #dd514c;
+		}
+		.wide{
+			min-width: 120px;
+		}
+		.instructions td{
+			font-size: 16px;
+		}
+	</style>
+</head>
+<body ng-controller="bfController">
+	<div class="sdf-wrapper sdf-default" id="container">
+		<div class="sdf-grid">
+			<div class="sdf-cell sdf-12">
+				<h1>Brainfuck visualizer</h1>
+				<h3>Look it go!</h3>
+			</div>
+			<div class="sdf-cell sdf-12 sdf-v-padding-big">
+				<h3>Instructions</h3>
+				<table class="sdf-table sdf-light sdf-border sdf-round sdf-padding instructions">
+					<tr><td>></td><td>increment the data pointer (to point to the next cell to the right).</td></tr>
+					<tr><td><</td><td>decrement the data pointer (to point to the next cell to the left).</td></tr>
+					<tr><td>+</td><td>increment (increase by one) the byte at the data pointer.</td></tr>
+					<tr><td>-</td><td>decrement (decrease by one) the byte at the data pointer.</td></tr>
+					<tr><td>.</td><td>output the byte at the data pointer.</td></tr>
+					<tr><td>,</td><td>accept one byte of input, storing its value in the byte at the data pointer.</td></tr>
+					<tr><td>[</td><td>if the byte at the data pointer is zero, then instead of moving the instruction pointer forward to the next command, jump it forward to the command after the matching ] command.</td></tr>
+					<tr><td>]</td><td>if the byte at the data pointer is nonzero, then instead of moving the instruction pointer forward to the next command, jump it back to the command after the matching [ command.</td></tr>
+				</table>
+			</div>
+			<div class="sdf-cell sdf-12 sdf-form">
+				<div class="sdf-form-group">
+					<h3>Code</h3>
+					<textarea ng-model="code" class="sdf-input"></textarea>
+				</div>
+			</div>
+			<div class="sdf-cell sdf-12 sdf-xs-6 sdf-padding">
+				<div class="sdf-btn-group sdf-h-align-left">
+					<button class="sdf-button wide" ng-class="brainfuck.active ? 'sdf-danger' : 'sdf-success'" ng-show="!timer" ng-click="brainfuck.active ?  stop() : start()" >{{ brainfuck.active ? 'Stop' : 'Start' }}</button>
+					<button class="sdf-button wide" ng-class="brainfuck.active ? 'sdf-warning' : 'sdf-success'" ng-show="timer" ng-click="brainfuck.active ? pause() : continue()">{{ brainfuck.active ? 'Pause' : 'Continue' }}</button>
+					<button class="sdf-button sdf-dark" ng-click="next()">&gt;&gt;</button>
+				</div>
+			</div>
+			<div class="sdf-cell sdf-12 sdf-xs-6 sdf-padding">
+				<div class="sdf-btn-group sdf-h-align-right">
+					<div class="sdf-input-group">
+						<span class="sdf-addon sdf-primary">delay</span>
+						<input type="text" class="sdf-input" style="max-width: 60px" ng-model="speed">
+					</div>
+					<div style="width: 10px"></div>
+					<button class="sdf-button sdf-danger wide" ng-click="reset()">Reset</button>
+				</div>
+			</div>
+		</div>
+		<div class="sdf-grid sdf-v-margin-big">
+			<div class="sdf-cell sdf-12">
+				<div>
+					<div class="sdf-grid">
+						<div class="sdf-cell sdf-12 sdf-sm-4 sdf-padding sdf-secondary">
+							<h3>Input</h3>
+							<div class="sdf-grid">
+								<div class="sdf-cell sdf-1 sdf-no-padding sdf-text-center" ng-repeat="ins in input track by $index" ng-class="brainfuck.ip == $index ? 'cur' : 'not'">
+									{{ ins }}
+								</div>
+							</div>
+						</div>
+						<div class="sdf-cell sdf-12 sdf-sm-4 sdf-padding sdf-primary">
+							<h3>Memory</h3>
+							<div class="sdf-grid">
+								<div class="sdf-cell sdf-1 sdf-no-padding sdf-text-center" ng-repeat="ptr in brainfuck.mem track by $index" ng-class="brainfuck.ptr == $index ? 'cur' : 'not'">
+									{{ ptr }}
+								</div>
+							</div>
+						</div>
+						<div class="sdf-cell sdf-12 sdf-sm-4 sdf-padding sdf-dark">
+							<h3>Output</h3>
+							<div class="sdf-grid">
+								<div class="sdf-cell sdf-1 sdf-no-padding sdf-text-center" ng-repeat="chr in brainfuck.output track by $index">
+									{{ chr }}
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script src="js/visualizer.js"></script>
+</body>
+</html>
