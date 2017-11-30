@@ -6,10 +6,9 @@
 
 ### Some details and notes:
 
-* The memory buffer is 100 bytes. Initially the pointer points to the byte 0.
-* This interpreter doesn't accepts negative pointer values. But this can be bypassed by setting the initial pointer value to 50 for example
+* The memory buffer is 100 bytes long. Initially the pointer points to the byte 0.
+* The memory buffer pointer accepts negative values, it will negative overflow from 0 to 100;
 * To avoid infinite loops, the interpreter has a default limit to 5000 instructions.
-
-Memory  will overflow by the byte:
-* 255 + 1 => 0
-* 0 - 1 => 255
+* Memory bytes will overflow as a byte:
+  * 255 + 1 => 0
+  * 0 - 1 => 255
